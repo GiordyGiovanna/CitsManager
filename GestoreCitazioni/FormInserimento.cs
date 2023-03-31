@@ -21,7 +21,8 @@ namespace GestoreCitazioni
         {
             if (checkInserimento())
             {
-                Citazione newCitazione = new Citazione(txtTit.Text, rtbCit.Text, DateTime.Now, Convert.ToInt32((cmbAutori.SelectedItem as Author).Id));
+                Author a = (cmbAutori.SelectedItem as Author);
+                Citazione newCitazione = new Citazione(txtTit.Text, rtbCit.Text, DateTime.Now, a.Id, rtcComment.Text);
                 db_Cits.saveNewCit(newCitazione);
                 this.Close();
             }

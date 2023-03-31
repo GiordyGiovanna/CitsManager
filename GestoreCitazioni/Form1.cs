@@ -23,6 +23,8 @@ namespace GestoreCitazioni
         /// 1 - CHANGE GRAPHICS
         /// 2 - Make Date --> lastModify
         /// 3 - Users (?)
+        /// 4 - aggiungere tipo cit (dialogo/citazione/ecc)
+        /// 5 - Aggiungere possibilità di aggiungere autori
         /// soon
         
 

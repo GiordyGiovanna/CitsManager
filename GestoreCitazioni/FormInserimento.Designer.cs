@@ -35,6 +35,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.cmbAutori = new System.Windows.Forms.ComboBox();
+            this.rtcComment = new System.Windows.Forms.RichTextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -50,9 +52,9 @@
             // 
             this.rtbCit.BackColor = System.Drawing.Color.White;
             this.rtbCit.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.rtbCit.Location = new System.Drawing.Point(37, 93);
+            this.rtbCit.Location = new System.Drawing.Point(27, 89);
             this.rtbCit.Name = "rtbCit";
-            this.rtbCit.Size = new System.Drawing.Size(723, 285);
+            this.rtbCit.Size = new System.Drawing.Size(723, 273);
             this.rtbCit.TabIndex = 1;
             this.rtbCit.Text = "";
             // 
@@ -103,12 +105,33 @@
             this.cmbAutori.Size = new System.Drawing.Size(242, 40);
             this.cmbAutori.TabIndex = 6;
             // 
+            // rtcComment
+            // 
+            this.rtcComment.BackColor = System.Drawing.Color.White;
+            this.rtcComment.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.rtcComment.Location = new System.Drawing.Point(27, 499);
+            this.rtcComment.Name = "rtcComment";
+            this.rtcComment.Size = new System.Drawing.Size(723, 273);
+            this.rtcComment.TabIndex = 7;
+            this.rtcComment.Text = "";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(32, 452);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(134, 32);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "Commento";
+            // 
             // FormInserimento
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(814, 899);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.rtcComment);
             this.Controls.Add(this.cmbAutori);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -133,5 +156,7 @@
         private Label label2;
         private Label label3;
         private ComboBox cmbAutori;
+        private RichTextBox rtcComment;
+        private Label label4;
     }
 }

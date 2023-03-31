@@ -1,6 +1,7 @@
 ﻿using System.Data.SqlClient;
 using System.Configuration;
 using System.Collections.Specialized;
+using System.Data;
 
 namespace GestoreCitazioni
 {
@@ -30,8 +31,9 @@ namespace GestoreCitazioni
                                 reader.GetInt32(0),
                                 reader.GetString(1),
                                 reader.GetString(2),
-                                reader.GetDateTime(3),
-                                reader.GetInt32(4)));
+                                reader.GetDateTime(4),
+                                reader.GetInt32(5),
+                                reader.GetString(3)));
                         }
                     }
                 }
@@ -50,8 +52,7 @@ namespace GestoreCitazioni
             dateInTheCorretFormat = dateInTheCorretFormat.Split('/')[2] + "/" + dateInTheCorretFormat.Split('/')[1] + "/" + dateInTheCorretFormat.Split('/')[0];
             
             // I love this query, it returns the new record's ID
-            String sql = $"INSERT INTO citazioni OUTPUT INSERTED.idCit VALUES('{c.Titolo}', '{c.Cit}', '{dateInTheCorretFormat}', {c.author.Id}) ";
-
+            String sql = $"INSERT INTO citazioni OUTPUT INSERTED.idCit VALUES('{c.Titolo}', '{c.Cit}', '{c.Comment}', '{dateInTheCorretFormat}', {c.author.Id}) ";
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.AppSettings.Get("dbConnection")))
             {
 

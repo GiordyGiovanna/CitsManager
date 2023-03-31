@@ -9,8 +9,9 @@
 
 CREATE TABLE citazioni(
 	idCit int primary key identity(1,1),
-	title varchar(20) NOT NULL,
-	descr varchar(2000) NOT NULL,
+	title varchar(80) NOT NULL,
+	descr varchar(3000) NOT NULL,
+	comment varchar(4000) NOT NULL,
 	dataAggiunta datetime NOT NULL,
 	idAuthor int FOREIGN KEY REFERENCES Authors(idAuthor) NOT NULL
 )
