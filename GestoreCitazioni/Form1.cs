@@ -21,10 +21,12 @@ namespace GestoreCitazioni
         ///
         /// <summary 2.0>
         /// 1 - CHANGE GRAPHICS
-        /// 2 - Make Date --> lastModify
+        /// 2 - Make Date --> lastModify --> DONE
         /// 3 - Users (?)
-        /// 4 - aggiungere tipo cit (dialogo/citazione/ecc)
-        /// 5 - Aggiungere possibilità di aggiungere autori
+        /// 4 - add Typo (dialogo/citazione/ecc) -- WORK IN PROGRESS
+        /// 5 - Add the Author in a good way
+        /// 6 - Complite coolerCheck
+        /// 7 - addComment --> DONE (change graphics) --> TODO
         /// soon
         
 
