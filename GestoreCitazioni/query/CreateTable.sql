@@ -14,7 +14,7 @@ CREATE TABLE citazioni(
 	title varchar(80) NOT NULL,
 	descr varchar(6000) NOT NULL,
 	comment varchar(6000) NOT NULL,
-	lastModiofied datetime NOT NULL,
+	lastModified datetime NOT NULL,
 	typo varChar(40) NOT NULL,
 	idAuthor int FOREIGN KEY REFERENCES Authors(idAuthor) NOT NULL
 )

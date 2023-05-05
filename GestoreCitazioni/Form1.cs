@@ -14,20 +14,27 @@ namespace GestoreCitazioni
         /// 3 - make Modify form interactable - DONE
         /// 4 - Optimizations - DONE
         /// 5 - Insert - DONE
-        /// 6 - DELETE - TESTING
+        /// 6 - DELETE - DONE
         /// 7 - Deploy 1.0 In a new GitRepository
         /// </summary>
         /// 
         ///
         /// <summary 2.0>
-        /// 1 - CHANGE GRAPHICS
+        /// 1 - CHANGE GRAPHICS --> TBD
         /// 2 - Make Date --> lastModify --> DONE
         /// 3 - Users (?)
-        /// 4 - add Typo (dialogo/citazione/ecc) -- WORK IN PROGRESS
-        /// 5 - Add the Author in a good way
+        /// 4 - add Typo (dialogo/citazione/ecc) -- DONE
+        /// 5 - Add the Author in a good way 
         /// 6 - Complite coolerCheck
         /// 7 - addComment --> DONE (change graphics) --> TODO
+        /// 8 - Export csv File |
+        ///                     |--> Added Buttons
+        /// 9 - Import csv File |
+        /// 10- Gestire apostrofi
         /// soon
+        /// 
+
+
         
 
         private void Form1_Load(object sender, EventArgs e)

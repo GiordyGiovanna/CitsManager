@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Collections.Specialized;
 using System.Data;
+using Microsoft.VisualBasic;
 
 namespace GestoreCitazioni
 {
@@ -32,9 +33,11 @@ namespace GestoreCitazioni
                                 reader.GetString(1),
                                 reader.GetString(2),
                                 reader.GetDateTime(4),
-                                reader.GetInt32(5),
+                                reader.GetString(5),
+                                reader.GetInt32(6),
                                 reader.GetString(3)));
                         }
+                        reader.Close();
                     }
                 }
                 connection.Close();
@@ -47,17 +50,24 @@ namespace GestoreCitazioni
         {
             List<Citazione> citazioni = new List<Citazione>();
 
-            // I have to convert to the correct datetime (YYYY/MM/DD)
-            string dateInTheCorretFormat = DateTime.Now.ToShortDateString();
-            dateInTheCorretFormat = dateInTheCorretFormat.Split('/')[2] + "/" + dateInTheCorretFormat.Split('/')[1] + "/" + dateInTheCorretFormat.Split('/')[0];
-            
             // I love this query, it returns the new record's ID
-            String sql = $"INSERT INTO citazioni OUTPUT INSERTED.idCit VALUES('{c.Titolo}', '{c.Cit}', '{c.Comment}', '{dateInTheCorretFormat}', {c.author.Id}) ";
+            String sql = $"INSERT INTO citazioni OUTPUT INSERTED.idCit VALUES(@titolo, @cit, @comment, @data, @typo, @autore) ";
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.AppSettings.Get("dbConnection")))
             {
-
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
+                    command.Parameters.Add("@titolo", SqlDbType.VarChar);
+                    command.Parameters["@titolo"].Value = c.Titolo;
+                    command.Parameters.Add("@cit", SqlDbType.VarChar);
+                    command.Parameters["@cit"].Value = c.Cit;
+                    command.Parameters.Add("@comment", SqlDbType.VarChar);
+                    command.Parameters["@comment"].Value = c.Comment;
+                    command.Parameters.Add("@data", SqlDbType.DateTime);
+                    command.Parameters["@data"].Value = DateTime.Now;
+                    command.Parameters.Add("@typo", SqlDbType.VarChar);
+                    command.Parameters["@typo"].Value = c.Typo;
+                    command.Parameters.Add("@autore", SqlDbType.Int);
+                    command.Parameters["@autore"].Value = c.author.Id;
                     connection.Open();
                     c.Id = (int)command.ExecuteScalar();
                 }
@@ -87,12 +97,43 @@ namespace GestoreCitazioni
                                 reader.GetString(2),
                                 reader.GetString(3));
                         }
+                        reader.Close();
                     }
                 }
                 connection.Close();
             
             }
-            return autore == null ? throw new Exception("Autore mancante") : autore;
+            return autore;
+        }
+
+        public static Author getAuthorInLike(string authorsText)
+        {
+            Author autore = null;
+            String sql = $"SELECT * FROM Authors Where nome like '%{authorsText}%' OR cognome like '%{authorsText}%'";
+
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.AppSettings.Get("dbConnection")))
+            {
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+
+                        while (reader.Read())
+                        {
+                            autore = new Author(
+                                reader.GetInt32(0),
+                                reader.GetString(1),
+                                reader.GetString(2),
+                                reader.GetString(3));
+                        }
+                        reader.Close();
+                    }
+                }
+                connection.Close();
+
+            }
+            return autore;
         }
 
         public static List<Author> getAllAuthorsData()
@@ -116,6 +157,7 @@ namespace GestoreCitazioni
                                 reader.GetString(2),
                                 reader.GetString(3)));
                         }
+                        reader.Close();
                     }
                 }
                 connection.Close();
@@ -132,12 +174,37 @@ namespace GestoreCitazioni
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     connection.Open();
-                    using (SqlDataReader reader = command.ExecuteReader()){}
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        reader.Close();
+                    }
+
                 }
                 connection.Close();
             }
 
             allCits.Find(x => x.Id == c.Id).Cit = c.Cit;
+        }
+
+        public static int addNewAuthor(string nome, string cognome, string comesFrom, string eta = "")
+        {
+            String sql = eta != String.Empty ? 
+                $"INSERT INTO Authors (nome, cognome, provenienza, etaCit) OUTPUT INSERTED.idAuthor VALUES ('{nome}', '{cognome}', '{comesFrom}', {eta})" :
+                $"INSERT INTO Authors (nome, cognome, provenienza) OUTPUT INSERTED.idAuthor VALUES ('{nome}', '{cognome}', '{comesFrom}')";
+
+            int id;
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.AppSettings.Get("dbConnection")))
+            {
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    connection.Open();
+                    id = (int)command.ExecuteScalar();
+
+                }
+                connection.Close();
+            }
+
+            return id;
         }
 
         public static void deleteCit(Citazione c)
@@ -149,11 +216,13 @@ namespace GestoreCitazioni
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     connection.Open();
-                    using (SqlDataReader reader = command.ExecuteReader()) { }
+                    using (SqlDataReader reader = command.ExecuteReader()) 
+                    {
+                        reader.Close();
+                    }
                 }
                 connection.Close();
             }
-
             allCits.Remove(c);
         }
     }

@@ -8,6 +8,7 @@ namespace GestoreCitazioni
         public string Autore { get => author.NomeCompleto; }
         public string Cit { get => cit; set => cit = value; }
         public String Comment { get => comment; }
+        public String Typo { get => typo; }
         public String Data { get => data.ToShortDateString();}
 
         private int id;
@@ -16,16 +17,18 @@ namespace GestoreCitazioni
         public Author author;
         private DateTime data;
         private string comment;
+        private string typo;
 
-        public Citazione(string tit, string cit, DateTime dt, int auth, string comment)
+        public Citazione(string tit, string cit, DateTime dt, string typo, int auth, string comment)
         {
             Titolo = tit;
             Cit = cit;
             this.data = dt;
             author = db_Cits.getAuthorsData(auth);
             this.comment = comment;
+            this.typo = typo;
         }
-        public Citazione(int id, string tit, string cit, DateTime dt, int auth, string comment)
+        public Citazione(int id, string tit, string cit, DateTime dt, string typo, int auth, string comment)
         {
             Id = id;
             Titolo = tit;
@@ -33,6 +36,7 @@ namespace GestoreCitazioni
             data = dt;
             author = db_Cits.getAuthorsData(auth);
             this.comment = comment;
+            this.typo = typo;
         }
         public Citazione(){}
 

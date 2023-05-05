@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace GestoreCitazioni
 {
@@ -21,10 +22,29 @@ namespace GestoreCitazioni
         {
             if (checkInserimento())
             {
-                Author a = (cmbAutori.SelectedItem as Author);
-                Citazione newCitazione = new Citazione(txtTit.Text, rtbCit.Text, DateTime.Now, a.Id, rtcComment.Text);
-                db_Cits.saveNewCit(newCitazione);
-                this.Close();
+
+                Author ?a = cmbAutori?.SelectedItem as Author;
+                if (a == null)
+                {
+                    a = db_Cits.getAuthorInLike(cmbAutori.Text);
+                    if (a == null)
+                    {
+                        DialogResult dg = MessageBox.Show("Autore non trovato, vuoi aggiungere un nuovo autore?", "Autore non esistente",
+                             MessageBoxButtons.YesNo,
+                             MessageBoxIcon.Question);
+                        if (dg == DialogResult.Yes)
+                        {
+                            a = startProcedureToAddNewAuthor(cmbAutori.Text);
+                        }
+                    }
+                }
+                else
+                {
+                    Citazione newCitazione = new Citazione(txtTit.Text, rtbCit.Text, DateTime.Now, cmbTypo.SelectedItem.ToString(), a.Id, rtcComment.Text);
+                    db_Cits.saveNewCit(newCitazione);
+                    this.Close();
+                    return;
+                }
             }
             else
             {
@@ -53,6 +73,21 @@ namespace GestoreCitazioni
             }
 
             return ret;
+        }
+
+        private Author startProcedureToAddNewAuthor(string textNewAuthor)
+        {
+            Author newAuth;
+            //Apro la nuova form con dei dati già popolati
+            InserimentoAutore a = new InserimentoAutore(textNewAuthor);
+            DialogResult dga;
+            do
+            {
+                dga = a.ShowDialog();
+                newAuth =  a.newOne;
+            }
+            while (dga != DialogResult.Yes) ;
+            return newAuth;
         }
 
         private void FormInserimento_Load(object sender, EventArgs e)

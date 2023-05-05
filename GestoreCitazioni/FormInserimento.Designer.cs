@@ -37,6 +37,8 @@
             this.cmbAutori = new System.Windows.Forms.ComboBox();
             this.rtcComment = new System.Windows.Forms.RichTextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.cmbTypo = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -60,7 +62,7 @@
             // 
             // btnInserisci
             // 
-            this.btnInserisci.Location = new System.Drawing.Point(610, 384);
+            this.btnInserisci.Location = new System.Drawing.Point(652, 841);
             this.btnInserisci.Name = "btnInserisci";
             this.btnInserisci.Size = new System.Drawing.Size(150, 46);
             this.btnInserisci.TabIndex = 2;
@@ -124,12 +126,38 @@
             this.label4.TabIndex = 8;
             this.label4.Text = "Commento";
             // 
+            // cmbTypo
+            // 
+            this.cmbTypo.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.cmbTypo.BackColor = System.Drawing.Color.White;
+            this.cmbTypo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbTypo.ForeColor = System.Drawing.Color.Black;
+            this.cmbTypo.FormattingEnabled = true;
+            this.cmbTypo.Items.AddRange(new object[] {
+            "Conversazione",
+            "Monologo"});
+            this.cmbTypo.Location = new System.Drawing.Point(508, 398);
+            this.cmbTypo.Name = "cmbTypo";
+            this.cmbTypo.Size = new System.Drawing.Size(242, 40);
+            this.cmbTypo.TabIndex = 10;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(436, 398);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(71, 32);
+            this.label5.TabIndex = 9;
+            this.label5.Text = "Typo:";
+            // 
             // FormInserimento
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(814, 899);
+            this.Controls.Add(this.cmbTypo);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.rtcComment);
             this.Controls.Add(this.cmbAutori);
@@ -158,5 +186,7 @@
         private ComboBox cmbAutori;
         private RichTextBox rtcComment;
         private Label label4;
+        private ComboBox cmbTypo;
+        private Label label5;
     }
 }
