@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Gestore));
             this.BtnInserisci = new System.Windows.Forms.Button();
             this.dgvCit = new System.Windows.Forms.DataGridView();
             this.button1 = new System.Windows.Forms.Button();
@@ -98,6 +99,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dgvCit);
             this.Controls.Add(this.BtnInserisci);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Gestore";
             this.Text = "Gestore";
             this.Load += new System.EventHandler(this.Form1_Load);

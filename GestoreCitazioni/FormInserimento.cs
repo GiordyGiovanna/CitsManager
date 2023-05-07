@@ -35,6 +35,7 @@ namespace GestoreCitazioni
                         if (dg == DialogResult.Yes)
                         {
                             a = startProcedureToAddNewAuthor(cmbAutori.Text);
+                            cmbAutori.Items.Add(a);
                         }
                     }
                 }
@@ -92,7 +93,8 @@ namespace GestoreCitazioni
 
         private void FormInserimento_Load(object sender, EventArgs e)
         {
-            foreach (Author a in db_Cits.getAllAuthorsData())
+            List<Author> list = db_Cits.getAllAuthorsData();
+            foreach (Author a in list)
             {
                 cmbAutori.Items.Add(a);
             }
