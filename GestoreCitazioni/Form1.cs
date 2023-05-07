@@ -1,3 +1,6 @@
+using System.Configuration;
+using System.Windows.Forms;
+
 namespace GestoreCitazioni
 {
     public partial class Gestore : Form
@@ -24,13 +27,13 @@ namespace GestoreCitazioni
         /// 2 - Make Date --> lastModify --> DONE
         /// 3 - Users (?)
         /// 4 - add Typo (dialogo/citazione/ecc) -- DONE
-        /// 5 - Add the Author in a good way 
+        /// 5 - Add the Author in a good way DONE
         /// 6 - Complite coolerCheck
         /// 7 - addComment --> DONE (change graphics) --> TODO
-        /// 8 - Export csv File |
+        /// 8 - Export csv File | DONE
         ///                     |--> Added Buttons
         /// 9 - Import csv File |
-        /// 10- Gestire apostrofi
+        /// 10- Gestire apostrofi DONE
         /// soon
         /// 
 
@@ -64,7 +67,7 @@ namespace GestoreCitazioni
             dgvCit.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
             dgvCit.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvCit.GridColor = Color.White;
-            dgvCit.Location = new Point(12, 12);
+            dgvCit.Location = new Point(12, 50);
             dgvCit.Margin = new Padding(0);
             dgvCit.MultiSelect = false;
             dgvCit.Name = "dgvCit";
@@ -95,6 +98,61 @@ namespace GestoreCitazioni
                 Modify_Detail mod = new Modify_Detail(list[e.RowIndex]);
                 mod.ShowDialog();
                 refresh();
+            }
+        }
+
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Export
+            OpenFileDialog f = new OpenFileDialog();
+            f.Multiselect = false;
+            f.DefaultExt = "csv";
+            f.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*";
+            f.CheckFileExists = false;
+            if (!File.Exists(ConfigurationManager.AppSettings.Get("PathExport")))
+            {
+                Directory.CreateDirectory(ConfigurationManager.AppSettings.Get("PathExport"));
+            }
+            f.InitialDirectory = ConfigurationManager.AppSettings.Get("PathExport");
+            DialogResult d = f.ShowDialog();
+            if(d == DialogResult.OK)
+            {
+                StreamWriter sw = new StreamWriter(f.FileName, false);
+                foreach(Author a in db_Cits.AllAuthors)
+                {
+                    sw.WriteLine(a.ToExportString());
+                }
+                sw.WriteLine("///////////////////////////////////////////////////////////////////");
+                foreach (Citazione c in list)
+                {
+                    sw.WriteLine(c.ToExportString());
+                }
+                sw.Close();
+                MessageBox.Show("Esportazione conclusa con successo", "Esportazione", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void importToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Import
+            //Export
+            OpenFileDialog f = new OpenFileDialog();
+            f.Multiselect = false;
+            f.DefaultExt = "csv";
+            f.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*";
+            f.CheckFileExists = false;
+            if (!File.Exists(ConfigurationManager.AppSettings.Get("PathExport")))
+            {
+                Directory.CreateDirectory(ConfigurationManager.AppSettings.Get("PathExport"));
+            }
+            f.InitialDirectory = ConfigurationManager.AppSettings.Get("PathExport");
+            DialogResult d = f.ShowDialog();
+            if (d == DialogResult.OK)
+            {
+                StreamReader sr = new StreamReader(f.FileName);
+                db_Cits.
+                sr.Close();
+                MessageBox.Show("Importazione conclusa con successo", "Esportazione", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }

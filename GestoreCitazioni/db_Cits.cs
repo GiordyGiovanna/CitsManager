@@ -9,8 +9,10 @@ namespace GestoreCitazioni
     internal static class db_Cits
     {
         public static List<Citazione> Allcits { get => allCits.Count > 0 ? allCits : readfile(); }
+        public static List<Author> AllAuthors { get => allAuthors.Count > 0 ? allAuthors : getAllAuthorsData(); }
 
         private static List<Citazione> allCits = new List<Citazione>();
+        private static List<Author> allAuthors = new List<Author>();
 
         public static List<Citazione> readfile()
         {
@@ -161,6 +163,7 @@ namespace GestoreCitazioni
                 }
                 connection.Close();
             }
+            allAuthors = Authors;
             return Authors;
         }
 
@@ -218,7 +221,7 @@ namespace GestoreCitazioni
                 }
                 connection.Close();
             }
-
+            allAuthors.Add(getAuthorsData(id));
             return id;
         }
 
@@ -231,7 +234,7 @@ namespace GestoreCitazioni
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     connection.Open();
-                    command.Parameters.Add("@idCit", SqlDbType.int);
+                    command.Parameters.Add("@idCit", SqlDbType.Int);
                     command.Parameters["@idCit"].Value = c.Id;
                     using (SqlDataReader reader = command.ExecuteReader()) 
                     {
@@ -239,6 +242,34 @@ namespace GestoreCitazioni
                     }
                 }
                 connection.Close();
+            }
+            allCits.Remove(c);
+        }
+
+        public static void massiveImport(string csvFile)
+        {
+            String sqlDelete = $"DELETE citazioni WHERE 0 = 0";
+
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.AppSettings.Get("dbConnection")))
+            {
+                using (SqlCommand command = new SqlCommand(sqlDelete, connection))
+                {
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        reader.Close();
+                    }
+                }
+                connection.Close();
+            }
+
+            string strAuthors = csvFile.Split("///////////////////////////////////////////////////////////////////")[0];
+            string[] strListAuthors = strAuthors.Split("\n");
+            foreach (string author in strListAuthors)
+            {
+                string[] authorsData = author.Split(";");
+                Author a = new Author(int.Parse(authorsData[0]), authorsData[1], authorsData[2], authorsData[3]);
+                //Aggiungere metodo per aggiungere autori su db
             }
             allCits.Remove(c);
         }

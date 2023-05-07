@@ -35,8 +35,18 @@ namespace GestoreCitazioni
                         if (dg == DialogResult.Yes)
                         {
                             a = startProcedureToAddNewAuthor(cmbAutori.Text);
-                            cmbAutori.Items.Add(a);
+                            if(a != null)
+                            {
+                                cmbAutori.Items.Add(a);
+                            }
                         }
+                    }
+                    else
+                    {
+                        Citazione newCitazione = new Citazione(txtTit.Text, rtbCit.Text, DateTime.Now, cmbTypo.SelectedItem.ToString(), a.Id, rtcComment.Text);
+                        db_Cits.saveNewCit(newCitazione);
+                        this.Close();
+                        return;
                     }
                 }
                 else
@@ -82,12 +92,15 @@ namespace GestoreCitazioni
             //Apro la nuova form con dei dati già popolati
             InserimentoAutore a = new InserimentoAutore(textNewAuthor);
             DialogResult dga;
-            do
+            dga = a.ShowDialog();
+            if(dga == DialogResult.Cancel)
             {
-                dga = a.ShowDialog();
+                return null;
+            }
+            else
+            {
                 newAuth =  a.newOne;
             }
-            while (dga != DialogResult.Yes) ;
             return newAuth;
         }
 

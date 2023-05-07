@@ -22,6 +22,7 @@ namespace GestoreCitazioni
         {
             citazione = c;
             rtbCit.Text = c.Cit;
+            label1.Text = c.Titolo;
         }
 
         private void btnSave_Click(object sender, EventArgs e)

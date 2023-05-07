@@ -1,4 +1,4 @@
-
+﻿
 namespace GestoreCitazioni
 {
     public class Author
@@ -23,6 +23,11 @@ namespace GestoreCitazioni
             this.nome = nome;
             this.cognome = cognome;
             this.provenienza = provenienza;
+        }
+        public string ToExportString()
+        {
+            string s = $"{this.id};{this.nome};{this.cognome};{this.provenienza}".Replace("\r\n", "~").Replace("\r", "Σ").Replace("\n", "σ");
+            return s;
         }
     }
 }

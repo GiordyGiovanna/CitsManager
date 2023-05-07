@@ -50,5 +50,10 @@ namespace GestoreCitazioni
             db_Cits.deleteCit(this);
         }
 
+        public string ToExportString()
+        {
+            string s = $"{this.id};{this.titolo};{this.cit};{this.comment};{this.data};{this.author.Id};{this.typo}".Replace("\r\n", "~").Replace("\r", "Σ").Replace("\n", "σ");
+            return s; 
+        }
     }
 }
