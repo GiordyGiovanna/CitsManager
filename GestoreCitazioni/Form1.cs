@@ -29,10 +29,9 @@ namespace GestoreCitazioni
         /// 4 - add Typo (dialogo/citazione/ecc) -- DONE
         /// 5 - Add the Author in a good way DONE
         /// 6 - Complite coolerCheck
-        /// 7 - addComment --> DONE (change graphics) --> TODO
+        /// 7 - addComment --> DONE (change graphics) --> DONE
         /// 8 - Export csv File | DONE
-        ///                     |--> Added Buttons
-        /// 9 - Import csv File |
+        /// 9 - Import csv File | DONE
         /// 10- Gestire apostrofi DONE
         /// soon
         /// 
@@ -135,12 +134,10 @@ namespace GestoreCitazioni
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //Import
-            //Export
             OpenFileDialog f = new OpenFileDialog();
             f.Multiselect = false;
             f.DefaultExt = "csv";
             f.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*";
-            f.CheckFileExists = false;
             if (!File.Exists(ConfigurationManager.AppSettings.Get("PathExport")))
             {
                 Directory.CreateDirectory(ConfigurationManager.AppSettings.Get("PathExport"));
@@ -150,9 +147,10 @@ namespace GestoreCitazioni
             if (d == DialogResult.OK)
             {
                 StreamReader sr = new StreamReader(f.FileName);
-                db_Cits.
+                db_Cits.massiveImport(sr.ReadToEnd());
                 sr.Close();
                 MessageBox.Show("Importazione conclusa con successo", "Esportazione", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                refresh();
             }
         }
     }

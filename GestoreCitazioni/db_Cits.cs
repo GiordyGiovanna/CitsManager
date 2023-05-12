@@ -2,7 +2,6 @@
 using System.Configuration;
 using System.Collections.Specialized;
 using System.Data;
-using Microsoft.VisualBasic;
 
 namespace GestoreCitazioni
 {
@@ -46,7 +45,7 @@ namespace GestoreCitazioni
             return citazioni;
         }
 
-        public static void saveNewCit(Citazione c)
+        public static void saveNewCit(Citazione c, bool isImport = false)
         {
             List<Citazione> citazioni = new List<Citazione>();
 
@@ -63,7 +62,7 @@ namespace GestoreCitazioni
                     command.Parameters.Add("@comment", SqlDbType.VarChar);
                     command.Parameters["@comment"].Value = c.Comment;
                     command.Parameters.Add("@data", SqlDbType.DateTime);
-                    command.Parameters["@data"].Value = DateTime.Now;
+                    command.Parameters["@data"].Value = !isImport ? DateTime.Now : c.Data;
                     command.Parameters.Add("@typo", SqlDbType.VarChar);
                     command.Parameters["@typo"].Value = c.Typo;
                     command.Parameters.Add("@autore", SqlDbType.Int);
@@ -248,30 +247,40 @@ namespace GestoreCitazioni
 
         public static void massiveImport(string csvFile)
         {
-            String sqlDelete = $"DELETE citazioni WHERE 0 = 0";
-
+            String sqlDelete = $"DROP TABLE citazioni;DROP TABLE Authors;CREATE TABLE Authors(idAuthor int primary key identity(1,1),nome varchar(40) NOT NULL,cognome varchar(40) NOT NULL,provenienza varchar(40) NOT NULL,tetaCit int)CREATE TABLE citazioni(idCit int primary key identity(1,1),title varchar(80) NOT NULL,descr varchar(6000) NOT NULL,comment varchar(6000) NOT NULL,lastModified datetime NOT NULL,typo varChar(40) NOT NULL,idAuthor int FOREIGN KEY REFERENCES Authors(idAuthor) NOT NULL)";
+            db_Cits.allCits = new List<Citazione>();
+            db_Cits.allAuthors = new List<Author>();
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.AppSettings.Get("dbConnection")))
             {
                 using (SqlCommand command = new SqlCommand(sqlDelete, connection))
                 {
                     connection.Open();
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        reader.Close();
-                    }
+                    command.ExecuteNonQuery();
                 }
                 connection.Close();
             }
 
             string strAuthors = csvFile.Split("///////////////////////////////////////////////////////////////////")[0];
+            string strCits = csvFile.Split("///////////////////////////////////////////////////////////////////")[1];
             string[] strListAuthors = strAuthors.Split("\n");
+            string[] strListCits = strCits.Split("\n");
             foreach (string author in strListAuthors)
             {
                 string[] authorsData = author.Split(";");
-                Author a = new Author(int.Parse(authorsData[0]), authorsData[1], authorsData[2], authorsData[3]);
-                //Aggiungere metodo per aggiungere autori su db
+                if (authorsData[0].Length > 0)
+                {
+                    addNewAuthor(authorsData[1], authorsData[2], authorsData[3]);
+                }
             }
-            allCits.Remove(c);
+            foreach (string cit in strListCits)
+            {
+                if (cit.Contains(';'))
+                {
+                    string[] citData = cit.Split(";");
+                    Citazione c = new Citazione(citData[1], citData[2], new DateTime(int.Parse(citData[4].Split('/')[2].Split(' ')[0]), int.Parse(citData[4].Split('/')[1]), int.Parse(citData[4].Split('/')[0]) ), citData[6], int.Parse(citData[5]), citData[3]);
+                    saveNewCit(c, true);
+                }
+            }
         }
     }
 }
